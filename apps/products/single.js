@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const rabbitmq = require("../../tools/rabbitmq")
+const http = require("../../tools/http")
 let configs = require("../../tools/configs")
 const protocol = configs.apps.protocol
 const ip = configs.apps.ip
@@ -14,12 +14,9 @@ const request = require('request')
 
 router.get('/:slug', function(req, res) {
     const slug = req.params.slug
-    request.get(protocol + '://' + ip + 'product/' + slug + '/' + productsSingleID + productsSingleIDCount, function(err, response, body) {
-        if (!err)
-            res.send("your request could not be answered")
-        else
-            rabbitmq.receive(productsSingleID + productsSingleIDCount++, res)
-    })
-
+    const url = protocol + '://' + ip + '/product/' + slug + '/' + productsSingleID + productsSingleIDCount
+    const channelName = productsSingleID + productsSingleIDCount
+    http.get(url, channelName, res)
+    productsSingleIDCount++
 })
 module.exports = router

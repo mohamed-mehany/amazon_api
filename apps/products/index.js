@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const rabbitmq = require("../../tools/rabbitmq")
+const http = require("../../tools/http")
 let configs = require("../../tools/configs")
 const protocol = configs.apps.protocol
 const ip = configs.apps.ip
@@ -14,23 +14,17 @@ const productsPerLoad = configs.apps.products.perLoad;
 const request = require('request')
 router.get('/:page', function(req, res) {
     const page = req.params.page
-    request.get(protocol + '://' + ip + 'products/' + page * productsPerLoad + "/" + productsIndexID + productsIndexIDCount, function(err, response, body) {
-        if (!err)
-            res.send("your request could not be answered")
-        else
-            rabbitmq.receive(productsIndexID + productsIndexIDCount++, res)
-    })
-
+    const url = protocol + '://' + ip + '/products/' + page * productsPerLoad + "/" + productsIndexID + productsIndexIDCount
+    const channelName = productsIndexID + productsIndexIDCount
+    http.get(url, channelName, res)
+    productsIndexIDCount++
 })
 
 router.get('/', function(req, res) {
-    request.get(protocol + '://' + ip + 'products/' + 1 * productsPerLoad + "/" + productsIndexID + productsIndexIDCount, function(err, response, body) {
-        if (!err)
-            res.send("your request could not be answered")
-        else
-            rabbitmq.receive(productsIndexID + productsIndexIDCount++, res)
-    })
-
+    const url = protocol + '://' + ip + '/products/' + 1 * productsPerLoad + "/" + productsIndexID + productsIndexIDCount
+    const channelName = productsIndexID + productsIndexIDCount
+    http.get(url, channelName, res)
+    productsIndexIDCount++
 })
 
 module.exports = router
