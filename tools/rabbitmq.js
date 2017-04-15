@@ -22,7 +22,7 @@ module.exports = {
             }, 500)
         })
     },
-    receive: function(channelName, sendTo) {
+    receive: function(channelName, callback) {
         amqp.connect(protocol + '://' + ip, function(err, conn) {
             conn.createChannel(function(err, ch) {
                 ch.assertQueue(channelName, { durable: false })
@@ -30,7 +30,7 @@ module.exports = {
                 ch.consume(channelName, function(response) {
                     console.log(" [x] Received %s", response.content.toString())
                     conn.close()
-                    sendTo.send(response.content.toString())
+                    callback(false, response.content.toString())
                 }, { noAck: true })
             })
         })

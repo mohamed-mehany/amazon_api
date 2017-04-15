@@ -4,6 +4,8 @@ const http = require("../../tools/http")
 let configs = require("../../tools/configs")
 const protocol = configs.apps.protocol
 const ip = configs.apps.ip
+const parallel = require("../../tools/parallel")
+
 
 /* -- channels Names and coutners -- */
 const productsIndexID = configs.apps.products.channels.index;
@@ -16,14 +18,22 @@ router.get('/:page', function(req, res) {
     const page = req.params.page
     const url = protocol + '://' + ip + '/products/' + page * productsPerLoad + "/" + productsIndexID + productsIndexIDCount
     const channelName = productsIndexID + productsIndexIDCount
-    http.get(url, channelName, res)
+    parallel.parallelize(["products"], [
+        function(callback) {
+            http.get(url, channelName, callback)
+        }
+    ], res)
     productsIndexIDCount++
 })
 
 router.get('/', function(req, res) {
     const url = protocol + '://' + ip + '/products/' + 1 * productsPerLoad + "/" + productsIndexID + productsIndexIDCount
     const channelName = productsIndexID + productsIndexIDCount
-    http.get(url, channelName, res)
+    parallel.parallelize(["products"], [
+        function(callback) {
+            http.get(url, channelName, callback)
+        }
+    ], res)
     productsIndexIDCount++
 })
 
