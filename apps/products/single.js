@@ -7,21 +7,23 @@ const ip = configs.apps.ip
 const parallel = require("../../tools/parallel")
 
 /* -- channels Names and coutners -- */
-const productsSingleID = configs.apps.products.channels.single;
-let productsSingleIDCount = 1;
+const productsSingleId = configs.apps.products.channels.single;
+let productsSingleIdCount = 1;
 /* -- channels Names and coutners -- */
 
 const request = require('request')
 
 router.get('/:slug', function(req, res) {
     const slug = req.params.slug
-    const url = protocol + '://' + ip + '/product/' + slug + '/' + productsSingleID + productsSingleIDCount
-    const channelName = productsSingleID + productsSingleIDCount
+    const url = protocol + '://' + ip + '/product/' + slug + '/' + productsSingleId + productsSingleIdCount
+    const channelName = productsSingleId + productsSingleIdCount
     parallel.parallelize(["product"], [
         function(callback) {
             httpRequest.get(url, channelName, callback)
         }
-    ], res)
-    productsSingleIDCount++
+    ], function(response) {
+        res.send(response)
+    })
+    productsSingleIdCount++
 })
 module.exports = router

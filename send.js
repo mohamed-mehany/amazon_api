@@ -1,2 +1,2 @@
 let rabbitmq = require("./tools/rabbitmq")
-rabbitmq.send("hello", "hello world")
+rabbitmq.send("singleProduct2", "hello world")

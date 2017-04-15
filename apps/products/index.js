@@ -8,33 +8,33 @@ const parallel = require("../../tools/parallel")
 
 
 /* -- channels Names and coutners -- */
-const productsIndexID = configs.apps.products.channels.index;
-let productsIndexIDCount = 1;
+const productsIndexId = configs.apps.products.channels.index;
+let productsIndexIdCount = 1;
 const productsPerLoad = configs.apps.products.perLoad;
 /* -- channels Names and coutners -- */
 
 const request = require('request')
 router.get('/:page', function(req, res) {
     const page = req.params.page
-    const url = protocol + '://' + ip + '/products/' + page * productsPerLoad + "/" + productsIndexID + productsIndexIDCount
-    const channelName = productsIndexID + productsIndexIDCount
+    const url = protocol + '://' + ip + '/products/' + page * productsPerLoad + "/" + productsIndexId + productsIndexIdCount
+    const channelName = productsIndexId + productsIndexIdCount
     parallel.parallelize(["products"], [
         function(callback) {
             httpRequest.get(url, channelName, callback)
         }
     ], res)
-    productsIndexIDCount++
+    productsIndexIdCount++
 })
 
 router.get('/', function(req, res) {
-    const url = protocol + '://' + ip + '/products/' + 1 * productsPerLoad + "/" + productsIndexID + productsIndexIDCount
-    const channelName = productsIndexID + productsIndexIDCount
+    const url = protocol + '://' + ip + '/products/' + 1 * productsPerLoad + "/" + productsIndexId + productsIndexIdCount
+    const channelName = productsIndexId + productsIndexIdCount
     parallel.parallelize(["products"], [
         function(callback) {
             httpRequest.get(url, channelName, callback)
         }
     ], res)
-    productsIndexIDCount++
+    productsIndexIdCount++
 })
 
 module.exports = router

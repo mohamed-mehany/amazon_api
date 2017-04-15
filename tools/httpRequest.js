@@ -8,8 +8,8 @@ const ip = configs.apiMQ.ip
 module.exports = {
     get: function(url, channelName, callback) {
         request.get(url, function(err, response, body) {
-            if (err)
-                callback(true)
+            if (!err)
+                callback(err)
             else
                 rabbitmq.receive(channelName, callback)
         })
