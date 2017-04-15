@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const http = require("../../tools/http")
+const httpRequest = require("../../tools/httpRequest")
 let configs = require("../../tools/configs")
 const protocol = configs.apps.protocol
 const ip = configs.apps.ip
@@ -20,7 +20,7 @@ router.get('/:page', function(req, res) {
     const channelName = productsIndexID + productsIndexIDCount
     parallel.parallelize(["products"], [
         function(callback) {
-            http.get(url, channelName, callback)
+            httpRequest.get(url, channelName, callback)
         }
     ], res)
     productsIndexIDCount++
@@ -31,7 +31,7 @@ router.get('/', function(req, res) {
     const channelName = productsIndexID + productsIndexIDCount
     parallel.parallelize(["products"], [
         function(callback) {
-            http.get(url, channelName, callback)
+            httpRequest.get(url, channelName, callback)
         }
     ], res)
     productsIndexIDCount++
