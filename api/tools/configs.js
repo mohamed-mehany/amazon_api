@@ -11,7 +11,10 @@ module.exports = {
         products: {
             channels: {
                 index: 'productsIndex',
-                single: 'singleProduct'
+                single: 'singleProduct',
+                reviews: {
+                    productReviews: 'productReviews'
+                }
             },
             perLoad: 20
         },
