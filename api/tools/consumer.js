@@ -12,7 +12,7 @@ module.exports = {
         commands.forEach(function(command) {
             requests.push(
                 function(callback) {
-                    httpRequest.post(url + sendingQueues[i++], { receivingQueue: receivingQueue, command: command, data: data }, receivingQueue, callback)
+                    httpRequest.post(url + '/' + sendingQueues[i++], { receivingQueue: receivingQueue, command: command, data: data }, receivingQueue, callback)
                 }
             )
         })
