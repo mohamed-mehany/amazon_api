@@ -7,12 +7,12 @@ module.exports = {
     },
     apps: {
         protocol: 'http',
-        ip: 'localhost',
+        ip: 'localhost:8080',
         reviews: {
             getReviewsRoute: {
-                sendingQueues: ['productReviews'],
+                sendingQueues: ['Ratings'],
                 receivingQueue: 'getProductReviews',
-                commands: ['getProductRatings']
+                commands: ['GetProductRatings']
             }
 
         },
