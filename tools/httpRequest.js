@@ -1,5 +1,5 @@
 const amqp = require('amqplib/callback_api')
-let configs = require("./configs")
+const configs = require("./configs")
 const request = require('request')
 const rabbitmq = require("./rabbitmq")
 

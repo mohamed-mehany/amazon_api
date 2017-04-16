@@ -1,6 +1,5 @@
-var amqp = require('amqplib/callback_api')
-let configs = require("./configs")
-
+const amqp = require('amqplib/callback_api')
+const configs = require("./configs")
 const protocol = configs.apiMQ.protocol
 const ip = configs.apiMQ.ip
 module.exports = {

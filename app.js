@@ -1,10 +1,8 @@
-var express = require('express')
-var app = express()
-var products = require("./apps/products/index")
-var product = require("./apps/products/single")
-var home = require("./apps/home")
+const express = require('express')
+const app = express()
+const products = require("./apps/products/index")
+const product = require("./apps/products/single")
 
-app.use('/', home)
 app.use('/products', products)
 app.use('/product', product)
 
