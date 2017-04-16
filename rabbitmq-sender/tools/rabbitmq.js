@@ -32,7 +32,8 @@ module.exports = {
                     ch.assertQueue(queueName, { durable: false })
                     console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", queueName)
                     ch.consume(queueName, function(response) {
-                        responseJson = JSON.parse(response.data)
+                        console.log(response)
+                        responseJson = JSON.parse(response.content)
                         if (typeof rabbit[queueName + responseJson.id] === 'undefined') {
                             rabbit[queueName + responseJson.id] = []
                         }
