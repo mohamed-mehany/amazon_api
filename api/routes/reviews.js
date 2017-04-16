@@ -10,19 +10,15 @@ router.get('/:productId', function(req, res) {
     const commands = configs.apps.reviews.getReviewsRoute.commands;
     const numberOfRequests = commands.length;
     const data = {
-      requestId: getProductReviewsRequestCount,
-      data:
-      {
+        requestId: getProductReviewsRequestCount,
         product_id: productId
-      }
     };
     const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data);
     parallel.parallelize(requests, function(response) {
-        if (response){
+        if (response) {
             console.log(response);
             res.send("error");
-        }
-        else {
+        } else {
             consumer.wait(receivingQueue, getProductReviewsRequestCount, numberOfRequests, function() {
                 res.send(rabbit[receivingQueue + getProductReviewsRequestCount++]);
             })

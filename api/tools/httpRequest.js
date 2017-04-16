@@ -14,7 +14,7 @@ module.exports = {
     post: function(url, data, queueName, callback) {
         var options = {
             method: "POST",
-            json: JSON.stringify(data)
+            json: data
         };
         request(url, options, function(err, response, body) {
             if (err)
