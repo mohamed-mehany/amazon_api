@@ -12,7 +12,11 @@ module.exports = {
         })
     },
     post: function(url, data, queueName, callback) {
-        request.post(url, data, function(err, response, body) {
+        var options = {
+            method: "POST",
+            json: JSON.stringify(data)
+        };
+        request(url, options, function(err, response, body) {
             if (err)
                 callback(err)
             else {
