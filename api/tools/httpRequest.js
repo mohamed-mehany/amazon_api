@@ -11,4 +11,13 @@ module.exports = {
             }
         })
     },
+    post: function(url, data, queueName, callback) {
+        request.post(url, data, function(err, response, body) {
+            if (!err)
+                callback(err)
+            else {
+                rabbitmq.receive(queueName, callback)
+            }
+        });
+    }
 }
