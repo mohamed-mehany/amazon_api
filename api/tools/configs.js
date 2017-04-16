@@ -8,15 +8,13 @@ module.exports = {
     apps: {
         protocol: 'http',
         ip: 'localhost',
-        products: {
-            channels: {
-                index: 'productsIndex',
-                single: 'singleProduct',
-                reviews: {
-                    productReviews: 'productReviews'
-                }
-            },
-            perLoad: 20
+        reviews: {
+            getReviewsRoute: {
+                sendingQueues: ['productReviews'],
+                receivingQueue: 'getProductReviews',
+                commands: ['getProductRatings']
+            }
+
         },
 
     }

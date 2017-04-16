@@ -13,8 +13,8 @@ global.parallel = require("./tools/parallel")
 global.consumer = require("./tools/consumer.js")
 global.router = express.Router()
     /*-- global variables --*/
-const product = require("./apps/products/single")
-app.use('/product', product)
+const reviews = require("./routes/reviews")
+app.use('/reviews', reviews)
 
 app.listen(3444, function() {
     console.log('Example app listening on port 3444!')
