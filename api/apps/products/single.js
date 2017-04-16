@@ -18,7 +18,7 @@ router.get('/:slug', function(req, res) {
             httpRequest.get(url, queueName, callback)
         },
         function(callback) {
-            httpRequest.get(url, queueName, callback)
+            httpRequest.post(url, { key: 'value' }, queueName, callback)
         }
     ], function(response) {
         if (response)
