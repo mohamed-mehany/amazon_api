@@ -32,11 +32,11 @@ module.exports = {
                     ch.assertQueue(queueName, { durable: false })
                     console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", queueName)
                     ch.consume(queueName, function(response) {
-                        responseJson = JSON.parse(response.content)
+                        responseJson = JSON.parse(response.data)
                         if (typeof rabbit[queueName + responseJson.id] === 'undefined') {
                             rabbit[queueName + responseJson.id] = []
                         }
-                        rabbit[queueName + responseJson.count].push(responseJson.content.toString())
+                        rabbit[queueName + responseJson.id].push(responseJson.data.toString())
                         conn.close()
                         callback(false)
                     }, { noAck: true })

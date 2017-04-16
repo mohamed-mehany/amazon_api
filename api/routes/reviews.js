@@ -9,7 +9,7 @@ router.get('/:productId', function(req, res) {
     const sendingQueues = configs.apps.reviews.getReviewsRoute.sendingQueues
     const commands = configs.apps.reviews.getReviewsRoute.commands
     const numberOfRequests = commands.length
-    const data = { requestCount: getProductReviewsRequestCount, product_id: productId }
+    const data = { requestId: getProductReviewsRequestCount, product_id: productId }
     const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data)
     parallel.parallelize(requests, function(response) {
         if (response)
