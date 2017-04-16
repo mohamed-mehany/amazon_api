@@ -8,7 +8,8 @@ app.use('/', home)
 app.use('/products', products)
 app.use('/product', product)
 
-
+global.rabbit = []
+global.consumer = require("./tools/consumer.js")
 
 
 app.listen(3444, function() {

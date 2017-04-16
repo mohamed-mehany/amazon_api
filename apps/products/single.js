@@ -15,15 +15,26 @@ const request = require('request')
 
 router.get('/:slug', function(req, res) {
     const slug = req.params.slug
-    const url = protocol + '://' + ip + '/product/' + slug + '/' + productsSingleId + productsSingleIdCount
-    const channelName = productsSingleId + productsSingleIdCount
-    parallel.parallelize(["product"], [
+    const url = protocol + '://' + ip + '/product/' + slug + '/' + productsSingleId + '/' + productsSingleIdCount
+    const queueName = productsSingleId
+    const numberOfRequests = 2
+    parallel.parallelize([
         function(callback) {
-            httpRequest.get(url, channelName, callback)
+            httpRequest.get(url, queueName, callback)
+        },
+        function(callback) {
+            httpRequest.get(url, queueName, callback)
         }
     ], function(response) {
-        res.send(response)
+        if (response)
+            res.send("error")
+        else {
+            consumer.wait(productsSingleId, productsSingleIdCount, numberOfRequests, function() {
+                res.send(rabbit[productsSingleId + productsSingleIdCount++])
+            })
+
+        }
+
     })
-    productsSingleIdCount++
 })
 module.exports = router

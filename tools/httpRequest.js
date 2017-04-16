@@ -6,12 +6,14 @@ const rabbitmq = require("./rabbitmq")
 const protocol = configs.apiMQ.protocol
 const ip = configs.apiMQ.ip
 module.exports = {
-    get: function(url, channelName, callback) {
+    get: function(url, queueName, callback) {
         request.get(url, function(err, response, body) {
+
             if (!err)
                 callback(err)
-            else
-                rabbitmq.receive(channelName, callback)
+            else {
+                rabbitmq.receive(queueName, callback)
+            }
         })
     },
 }
