@@ -52,6 +52,8 @@ router.get('/avgRating/:productId', function(req, res) {
 });
 
 router.post('/create', function(req, res) {
+    if (typeof req.headers.userId === 'undefined')
+        return res.send("you must be logged in");
     const receivingQueue = configs.apps.ratings.createReviewRoute.receivingQueue;
     const sendingQueues = configs.apps.ratings.createReviewRoute.sendingQueues;
     const commands = configs.apps.ratings.createReviewRoute.commands;
