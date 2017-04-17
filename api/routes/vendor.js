@@ -26,7 +26,6 @@ router.post('/create', function(req, res) {
     let token = jwt.sign(data, 'ser-amazon');
     data['password'] = req.body.password;
     data['token'] = token;
-    console.log(data)
     const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data);
     parallel.parallelize(requests, function(response) {
         if (response) {

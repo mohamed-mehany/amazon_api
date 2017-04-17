@@ -4,6 +4,7 @@ const url = configs.apps.protocol + '://' + configs.apps.ip + '';
 let logInRequestCount = 1;
 let viewProfileRequestCount = 1;
 let editProfileRequestCount = 1;
+let createUserRequestCount = 1;
 /* -- counters -- */
 
 router.post('/login', function(req, res) {
@@ -18,7 +19,6 @@ router.post('/login', function(req, res) {
         strEmail: req.body.email,
         strPassword: req.body.password,
     };
-    console.log(data)
     const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data);
     parallel.parallelize(requests, function(response) {
         if (response) {
@@ -79,6 +79,42 @@ router.post('/profile/edit', function(req, res) {
         } else {
             consumer.wait(receivingQueue, editProfileRequestCount, numberOfRequests, function() {
                 res.send(rabbit[receivingQueue + editProfileRequestCount++]);
+            });
+        }
+    })
+});
+
+router.post('/create', function(req, res) {
+    if (typeof req.body.email === 'undefined' || typeof req.body.name === 'undefined' || typeof req.body.address === 'undefined' ||
+        typeof req.body.password === 'undefined' || typeof req.body.passwordCheck === 'undefined' || typeof req.body.dateOfBirth === 'undefined' ||
+        typeof req.body.gender === 'undefined')
+        return res.send({ error: 'you must provide all information' });
+    if (req.body.password != req.body.passwordCheck)
+        return res.send({ error: 'password does not match' });
+
+    const receivingQueue = configs.apps.users.registerRoute.receivingQueue;
+    const sendingQueues = configs.apps.users.registerRoute.sendingQueues;
+    const commands = configs.apps.users.registerRoute.commands;
+    const numberOfRequests = commands.length;
+    const data = {
+        requestId: createUserRequestCount,
+        email: req.body.email,
+        name: req.body.name,
+        address: req.body.address,
+        gender: req.body.gender,
+        date_of_birth: req.body.dateOfBirth
+    };
+    let token = jwt.sign(data, 'ser-amazon');
+    data['password'] = req.body.password;
+    data['token'] = token;
+    console.log(data)
+    const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data);
+    parallel.parallelize(requests, function(response) {
+        if (response) {
+            res.send(response);
+        } else {
+            consumer.wait(receivingQueue, createUserRequestCount, numberOfRequests, function() {
+                res.send(rabbit[receivingQueue + createUserRequestCount++]);
             });
         }
     })

@@ -43,6 +43,11 @@ module.exports = {
                 sendingQueues: ['User'],
                 receivingQueue: 'editProfile',
                 commands: ['EditProfileInfo']
+            },
+            registerRoute: {
+                sendingQueues: ['User'],
+                receivingQueue: 'registerUser',
+                commands: ['CreateUser']
             }
         },
         vendors: {
