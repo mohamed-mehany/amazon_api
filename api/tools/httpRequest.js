@@ -4,7 +4,7 @@ module.exports = {
     get: function(url, queueName, callback) {
         request.get(url, function(err, response, body) {
 
-            if (!err)
+            if (err)
                 callback(err)
             else {
                 rabbitmq.receive(queueName, callback)
@@ -12,11 +12,15 @@ module.exports = {
         })
     },
     post: function(url, data, queueName, callback) {
-        request.post(url, data, function(err, response, body) {
+        let options = {
+            method: "POST",
+            json: data
+        };
+        request(url, options, function(err, response, body) {
             if (!err)
-                callback(err)
+                callback(err);
             else {
-                rabbitmq.receive(queueName, callback)
+                rabbitmq.receive(queueName, callback);
             }
         });
     }
