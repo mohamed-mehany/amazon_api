@@ -6,19 +6,21 @@ module.exports = {
     apps: {
         protocol: 'http',
         ip: 'localhost:8080',
-        reviews: {
-            getReviewsRoute: {
-                sendingQueues: ['Ratings'],
-                receivingQueue: 'getProductReviews',
-                commands: ['GetProductRatings']
-            }
-
-        },
         ratings: {
             getRatingsRoute: {
                 sendingQueues: ['Ratings'],
-                receivingQueue: 'getProductRatings',
+                receivingQueue: 'getProductAvgRatings',
                 commands: ['GetTotalRating']
+            },
+            getReviewsRoute: {
+                sendingQueues: ['Ratings'],
+                receivingQueue: 'getProductRatings',
+                commands: ['GetProductRatings']
+            },
+            createReviewRoute: {
+                sendingQueues: ['Ratings'],
+                receivingQueue: 'createRating',
+                commands: ['CreateRating']
             }
 
         }

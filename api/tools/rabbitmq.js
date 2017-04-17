@@ -34,6 +34,7 @@ module.exports = {
                         if (typeof rabbit[queueName + responseJson.id] === 'undefined') {
                             rabbit[queueName + responseJson.id] = [];
                         }
+                        console.log(queueName + responseJson.id);
                         rabbit[queueName + responseJson.id].push(responseJson.data.toString())
                         conn.close();
                         callback(false);

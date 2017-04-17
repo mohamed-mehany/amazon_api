@@ -1,5 +1,6 @@
 global.express = require('express');
 const app = express();
+var myParser = require("body-parser");
 
 /*-- global variables --*/
 global.rabbit = [];
@@ -12,10 +13,16 @@ global.httpRequest = require("./tools/httpRequest");
 global.parallel = require("./tools/parallel");
 global.consumer = require("./tools/consumer.js");
 /*-- global variables --*/
-const reviews = require("./routes/reviews");
 const ratings = require("./routes/ratings");
 
-app.use('/reviews', reviews);
+/*-- Middleware --*/
+app.use('/', function(req, res, next) {
+    if (req.headers.hasOwnProperty('token'))
+        req.headers["userId"] = "22";
+    next()
+});
+app.use(myParser.urlencoded({ extended: true }));
+/*-- Middleware --*/
 app.use('/ratings', ratings);
 
 app.listen(3444, function() {
