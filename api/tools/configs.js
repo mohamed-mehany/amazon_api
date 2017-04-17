@@ -27,8 +27,15 @@ module.exports = {
                 receivingQueue: 'getUserRatings',
                 commands: ['GetUserRatings']
             }
-
+        },
+        users: {
+            logInRoute: {
+                sendingQueues: ['User'],
+                receivingQueue: 'login',
+                commands: ['Login']
+            }
         }
+
 
     }
 }

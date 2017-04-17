@@ -13,7 +13,6 @@ router.get('productratings/:productId', function(req, res) {
     const sendingQueues = configs.apps.ratings.getReviewsRoute.sendingQueues;
     const commands = configs.apps.ratings.getReviewsRoute.commands;
     const numberOfRequests = commands.length;
-    console.log(getProductReviewsRequestCount)
     const data = {
         requestId: getProductReviewsRequestCount,
         product_id: productId
@@ -54,7 +53,9 @@ router.get('/avgRating/:productId', function(req, res) {
 
 router.post('/create', function(req, res) {
     if (typeof req.headers.userId === 'undefined')
-        return res.send("you must be logged in");
+        return res.send({ error: 'you must be logged in' });
+    if (typeof req.body.productId === 'undefined' || typeof req.body.value === 'undefined')
+        return res.send({ error: 'you must provide a product id and a rating' });
     const receivingQueue = configs.apps.ratings.createReviewRoute.receivingQueue;
     const sendingQueues = configs.apps.ratings.createReviewRoute.sendingQueues;
     const commands = configs.apps.ratings.createReviewRoute.commands;
