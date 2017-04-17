@@ -2,20 +2,20 @@ module.exports = {
     wait: function(productsSingleId, productsSingleIdCount, numberOfRequests, callback) {
         while (true) {
             if (typeof rabbit[productsSingleId + productsSingleIdCount] !== 'undefined' && rabbit[productsSingleId + productsSingleIdCount].length == numberOfRequests)
-                break
+                break;
         }
-        callback()
+        callback();
     },
     createRequests: function(url, receivingQueue, sendingQueues, commands, data) {
-        requests = []
+        requests = [];
         let i = 0;
         commands.forEach(function(command) {
             requests.push(
                 function(callback) {
-                    httpRequest.post(url + '/' + sendingQueues[i++], { receivingQueue: receivingQueue, command: command, data: data }, receivingQueue, callback)
+                    httpRequest.post(url + '/' + sendingQueues[i++], { receivingQueue: receivingQueue, command: command, data: data }, receivingQueue, callback);
                 }
-            )
-        })
-        return requests
+            );
+        });
+        return requests;
     }
 }

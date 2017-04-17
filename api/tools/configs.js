@@ -1,5 +1,3 @@
-const protocol = 'amqp'
-const ip = 'localhost'
 module.exports = {
     apiMQ: {
         protocol: 'amqp',
@@ -16,6 +14,14 @@ module.exports = {
             }
 
         },
+        ratings: {
+            getRatingsRoute: {
+                sendingQueues: ['Ratings'],
+                receivingQueue: 'getProductRatings',
+                commands: ['GetTotalRating']
+            }
+
+        }
 
     }
 }

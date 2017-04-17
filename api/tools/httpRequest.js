@@ -12,15 +12,15 @@ module.exports = {
         })
     },
     post: function(url, data, queueName, callback) {
-        var options = {
+        let options = {
             method: "POST",
             json: data
         };
         request(url, options, function(err, response, body) {
-            if (err)
-                callback(err)
+            if (!err)
+                callback(err);
             else {
-                rabbitmq.receive(queueName, callback)
+                rabbitmq.receive(queueName, callback);
             }
         });
     }

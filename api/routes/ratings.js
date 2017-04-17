@@ -1,31 +1,29 @@
 const router = express.Router();
 const url = configs.apps.protocol + '://' + configs.apps.ip + '';
 /* -- counters -- */
-let getProductReviewsRequestCount = 1;
+let getProductRatingsRequestCount = 1;
 /* -- counters -- */
 
 router.get('/:productId', function(req, res) {
     const productId = req.params.productId;
-    const receivingQueue = configs.apps.reviews.getReviewsRoute.receivingQueue;
-    const sendingQueues = configs.apps.reviews.getReviewsRoute.sendingQueues;
-    const commands = configs.apps.reviews.getReviewsRoute.commands;
+    const receivingQueue = configs.apps.ratings.getRatingsRoute.receivingQueue;
+    const sendingQueues = configs.apps.ratings.getRatingsRoute.sendingQueues;
+    const commands = configs.apps.ratings.getRatingsRoute.commands;
     const numberOfRequests = commands.length;
     const data = {
-        requestId: getProductReviewsRequestCount,
+        requestId: getProductRatingsRequestCount,
         product_id: productId
     };
     const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data);
     parallel.parallelize(requests, function(response) {
         if (response) {
             console.log(response);
-            res.send("error");
+            res.send(response);
         } else {
-            consumer.wait(receivingQueue, getProductReviewsRequestCount, numberOfRequests, function() {
-                res.send(rabbit[receivingQueue + getProductReviewsRequestCount++]);
+            consumer.wait(receivingQueue, getProductRatingsRequestCount, numberOfRequests, function() {
+                res.send(rabbit[receivingQueue + getProductRatingsRequestCount++]);
             });
-
         }
-
     })
 })
 module.exports = router;
