@@ -34,9 +34,14 @@ module.exports = {
                 receivingQueue: 'login',
                 commands: ['Login']
             },
-            viewProfile: {
+            viewProfileRoute: {
                 sendingQueues: ['User'],
                 receivingQueue: 'viewProfile',
+                commands: ['ViewUserProfile']
+            },
+            editProfileRoute: {
+                sendingQueues: ['User'],
+                receivingQueue: 'editProfile',
                 commands: ['ViewUserProfile']
             }
         }
