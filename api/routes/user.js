@@ -57,7 +57,7 @@ router.get('/profile', function(req, res) {
 router.post('/profile/edit', function(req, res) {
     if (typeof req.headers.userId === 'undefined')
         return res.send({ error: 'you must be logged in' });
-    if (typeof req.body.email === 'undefined' || typeof req.body.name === 'undefined' || typeof req.body.address === 'undefined' ||
+    if (typeof req.body.email === 'undefined' || typeof req.body.name === 'undefined' ||
         typeof req.body.address === 'undefined' || typeof req.body.dateOfBirth === 'undefined')
         return res.send({ error: 'you must provide all information' });
     const receivingQueue = configs.apps.users.editProfileRoute.receivingQueue;
