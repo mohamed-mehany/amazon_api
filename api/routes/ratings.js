@@ -4,9 +4,10 @@ const url = configs.apps.protocol + '://' + configs.apps.ip + '';
 let getProductReviewsRequestCount = 1;
 let getProductRatingsRequestCount = 1;
 let createProductRatingRequestCount = 1;
+let getUserRatingsCount = 1;
 /* -- counters -- */
 
-router.get('/:productId', function(req, res) {
+router.get('productratings/:productId', function(req, res) {
     const productId = req.params.productId;
     const receivingQueue = configs.apps.ratings.getReviewsRoute.receivingQueue;
     const sendingQueues = configs.apps.ratings.getReviewsRoute.sendingQueues;
@@ -76,4 +77,28 @@ router.post('/create', function(req, res) {
         }
     })
 })
+
+router.get('/userratings', function(req, res) {
+    if (typeof req.headers.userId === 'undefined')
+        return res.send("you must be logged in");
+    const receivingQueue = configs.apps.ratings.getUserRatingsRoute.receivingQueue;
+    const sendingQueues = configs.apps.ratings.getUserRatingsRoute.sendingQueues;
+    const commands = configs.apps.ratings.getUserRatingsRoute.commands;
+    const numberOfRequests = commands.length;
+    const data = {
+        requestId: getUserRatingsCount,
+        user_id: req.headers.userId,
+    };
+    const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data);
+    parallel.parallelize(requests, function(response) {
+        if (response) {
+            res.send(response);
+        } else {
+            consumer.wait(receivingQueue, getUserRatingsCount, numberOfRequests, function() {
+                res.send(rabbit[receivingQueue + getUserRatingsCount++]);
+            });
+        }
+    })
+})
+
 module.exports = router;

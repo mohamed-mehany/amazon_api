@@ -21,6 +21,11 @@ module.exports = {
                 sendingQueues: ['Ratings'],
                 receivingQueue: 'createRating',
                 commands: ['CreateRating']
+            },
+            getUserRatingsRoute: {
+                sendingQueues: ['Ratings'],
+                receivingQueue: 'getUserRatings',
+                commands: ['GetUserRatings']
             }
 
         }
