@@ -41,7 +41,6 @@ router.get('/profile', function(req, res) {
         requestId: viewProfileRequestCount,
         user_id: req.headers.userId,
     };
-    console.log(data)
     const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data);
     parallel.parallelize(requests, function(response) {
         if (response) {
