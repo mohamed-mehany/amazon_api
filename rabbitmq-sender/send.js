@@ -1,2 +1,2 @@
 const rabbitmq = require("./tools/rabbitmq")
-rabbitmq.send("login", '{"id": 1, "data": "omar3"}')
+rabbitmq.send("viewProfile", '{"id": 1, "data": "omar3"}')

@@ -33,6 +33,11 @@ module.exports = {
                 sendingQueues: ['User'],
                 receivingQueue: 'login',
                 commands: ['Login']
+            },
+            viewProfile: {
+                sendingQueues: ['User'],
+                receivingQueue: 'viewProfile',
+                commands: ['ViewUserProfile']
             }
         }
 
