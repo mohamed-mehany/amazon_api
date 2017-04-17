@@ -42,7 +42,7 @@ module.exports = {
             editProfileRoute: {
                 sendingQueues: ['User'],
                 receivingQueue: 'editProfile',
-                commands: ['ViewUserProfile']
+                commands: ['EditProfileInfo']
             }
         }
 
