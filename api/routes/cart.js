@@ -4,6 +4,7 @@ const url = configs.apps.protocol + '://' + configs.apps.ip + '';
 let viewCartRequestCount = 1;
 let addToCartRequestCount = 1;
 let changeItemQuantityRequestCount = 1;
+let proceedToPaymentRouteRequestCount = 1;
 /* -- counters -- */
 
 router.get('/', function(req, res) {
@@ -77,6 +78,33 @@ router.get('/edit/:productId', function(req, res) {
         } else {
             consumer.wait(receivingQueue, changeItemQuantityRequestCount, numberOfRequests, function() {
                 res.send(rabbit[receivingQueue + changeItemQuantityRequestCount++]);
+            });
+        }
+    })
+});
+
+
+router.post('/payment', function(req, res) {
+    if (typeof req.headers.userId === 'undefined')
+        return res.send({ error: 'you must be logged in' });
+    if (typeof req.body.cardNumber === 'undefined')
+        return res.send({ error: 'you must provide a credit card number' });
+    const receivingQueue = configs.apps.cart.proceedToPaymentRoute.receivingQueue;
+    const sendingQueues = configs.apps.cart.proceedToPaymentRoute.sendingQueues;
+    const commands = configs.apps.cart.proceedToPaymentRoute.commands;
+    const numberOfRequests = commands.length;
+    const data = {
+        requestId: proceedToPaymentRouteRequestCount,
+        userID: req.headers.userId,
+        cardNumber: req.body.cardNumber
+    };
+    const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data);
+    parallel.parallelize(requests, function(response) {
+        if (response) {
+            res.send(response);
+        } else {
+            consumer.wait(receivingQueue, proceedToPaymentRouteRequestCount, numberOfRequests, function() {
+                res.send(rabbit[receivingQueue + proceedToPaymentRouteRequestCount++]);
             });
         }
     })
