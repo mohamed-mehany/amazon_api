@@ -27,7 +27,35 @@ module.exports = {
                 receivingQueue: 'getUserRatings',
                 commands: ['GetUserRatings']
             }
-
+        },
+        users: {
+            logInRoute: {
+                sendingQueues: ['User'],
+                receivingQueue: 'login',
+                commands: ['Login']
+            },
+            viewProfileRoute: {
+                sendingQueues: ['User'],
+                receivingQueue: 'viewProfile',
+                commands: ['ViewUserProfile']
+            },
+            editProfileRoute: {
+                sendingQueues: ['User'],
+                receivingQueue: 'editProfile',
+                commands: ['EditProfileInfo']
+            },
+            registerRoute: {
+                sendingQueues: ['User'],
+                receivingQueue: 'registerUser',
+                commands: ['CreateUser']
+            }
+        },
+        vendors: {
+            registerRoute: {
+                sendingQueues: ['Vendor'],
+                receivingQueue: 'registerVendor',
+                commands: ['CreateVendor']
+            }
         }
 
     }

@@ -1,2 +1,2 @@
 const rabbitmq = require("./tools/rabbitmq")
-rabbitmq.send("getUserRatings", '{"id": 3, "data": "omar3"}')
+rabbitmq.send("registerUser", '{"id": 1, "data": "omar1"}')
