@@ -16,8 +16,8 @@ router.post('/login', function(req, res) {
     const numberOfRequests = commands.length;
     const data = {
         requestId: logInRequestCount,
-        strEmail: req.body.email,
-        strPassword: req.body.password,
+        email: req.body.email,
+        password: req.body.password,
     };
     const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data);
     parallel.parallelize(requests, function(response) {
