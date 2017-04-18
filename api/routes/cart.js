@@ -3,7 +3,7 @@ const url = configs.apps.protocol + '://' + configs.apps.ip + '';
 /* -- counters -- */
 let viewCartRequestCount = 1;
 let addToCartRequestCount = 1;
-
+let changeItemQuantityRequestCount = 1;
 /* -- counters -- */
 
 router.get('/', function(req, res) {
@@ -50,6 +50,33 @@ router.get('/add/:productId', function(req, res) {
         } else {
             consumer.wait(receivingQueue, addToCartRequestCount, numberOfRequests, function() {
                 res.send(rabbit[receivingQueue + addToCartRequestCount++]);
+            });
+        }
+    })
+});
+
+
+router.get('/edit/:productId', function(req, res) {
+    if (typeof req.headers.userId === 'undefined')
+        return res.send({ error: 'you must be logged in' });
+    if (typeof req.params.productId === 'undefined')
+        return res.send({ error: 'you must provide a product ID' });
+    const receivingQueue = configs.apps.cart.changeItemQuantityRoute.receivingQueue;
+    const sendingQueues = configs.apps.cart.changeItemQuantityRoute.sendingQueues;
+    const commands = configs.apps.cart.changeItemQuantityRoute.commands;
+    const numberOfRequests = commands.length;
+    const data = {
+        requestId: changeItemQuantityRequestCount,
+        userID: req.headers.userId,
+        productID: req.params.productId
+    };
+    const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data);
+    parallel.parallelize(requests, function(response) {
+        if (response) {
+            res.send(response);
+        } else {
+            consumer.wait(receivingQueue, changeItemQuantityRequestCount, numberOfRequests, function() {
+                res.send(rabbit[receivingQueue + changeItemQuantityRequestCount++]);
             });
         }
     })

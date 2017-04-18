@@ -66,7 +66,12 @@ module.exports = {
             addItemToCartRoute: {
                 sendingQueues: ['Cart'],
                 receivingQueue: 'addItemToCart',
-                commands: ['addItemToCart']
+                commands: ['AddItemToCart']
+            },
+            changeItemQuantityRoute: {
+                sendingQueues: ['Cart'],
+                receivingQueue: 'changeItemQuantity',
+                commands: ['ChangeItemQuantity']
             }
         }
 
