@@ -77,6 +77,11 @@ module.exports = {
                 sendingQueues: ['Cart'],
                 receivingQueue: 'proceedToPayment',
                 commands: ['ProceedToPayment']
+            },
+            removeItemFromCartRoute: {
+                sendingQueues: ['Cart'],
+                receivingQueue: 'removeItemFromCart',
+                commands: ['RemoveItemFromCart']
             }
         }
 
