@@ -1,2 +1,2 @@
 const rabbitmq = require("./tools/rabbitmq")
-rabbitmq.send("viewCart", '{"id": 1, "data": "omar1"}')
+rabbitmq.send("addItemToCart", '{"id": 2, "data": "omar1"}')

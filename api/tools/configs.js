@@ -62,6 +62,11 @@ module.exports = {
                 sendingQueues: ['Cart'],
                 receivingQueue: 'viewCart',
                 commands: ['ViewCart']
+            },
+            addItemToCartRoute: {
+                sendingQueues: ['Cart'],
+                receivingQueue: 'addItemToCart',
+                commands: ['addItemToCart']
             }
         }
 
