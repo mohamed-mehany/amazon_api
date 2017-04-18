@@ -16,6 +16,7 @@ global.consumer = require("./tools/consumer.js");
 const ratings = require("./routes/ratings");
 const user = require("./routes/user");
 const vendor = require("./routes/vendor");
+const cart = require("./routes/cart");
 /*-- Middleware --*/
 app.use('/', function(req, res, next) {
     if (req.headers.hasOwnProperty('token'))
@@ -29,6 +30,7 @@ app.use(myParser.urlencoded({ extended: true }));
 app.use('/ratings', ratings);
 app.use('/user', user);
 app.use('/vendor', vendor);
+app.use('/cart', cart);
 /*-- Routes --*/
 
 app.listen(3444, function() {

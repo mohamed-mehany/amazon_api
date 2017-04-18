@@ -56,6 +56,13 @@ module.exports = {
                 receivingQueue: 'registerVendor',
                 commands: ['CreateVendor']
             }
+        },
+        cart: {
+            viewCartRoute: {
+                sendingQueues: ['Cart'],
+                receivingQueue: 'viewCart',
+                commands: ['ViewCart']
+            }
         }
 
     }
