@@ -20,6 +20,15 @@ module.exports = {
             if (!err)
                 callback(err);
             else {
+                let entered = false;
+                // var startReceiving = setInterval(rabbitmq.receive.bind(null, queueName, function(rabitmqResponse) {
+                //     if (entered)
+                //         return;
+                //     entered = true;
+                //     clearInterval(startReceiving);
+                //     callback(rabitmqResponse);
+
+                // }), 20);
                 rabbitmq.receive(queueName, callback);
             }
         });
