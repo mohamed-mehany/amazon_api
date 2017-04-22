@@ -56,6 +56,33 @@ module.exports = {
                 receivingQueue: 'registerVendor',
                 commands: ['CreateVendor']
             }
+        },
+        cart: {
+            viewCartRoute: {
+                sendingQueues: ['Cart'],
+                receivingQueue: 'viewCart',
+                commands: ['ViewCart']
+            },
+            addItemToCartRoute: {
+                sendingQueues: ['Cart'],
+                receivingQueue: 'addItemToCart',
+                commands: ['AddItemToCart']
+            },
+            changeItemQuantityRoute: {
+                sendingQueues: ['Cart'],
+                receivingQueue: 'changeItemQuantity',
+                commands: ['ChangeItemQuantity']
+            },
+            proceedToPaymentRoute: {
+                sendingQueues: ['Cart'],
+                receivingQueue: 'proceedToPayment',
+                commands: ['ProceedToPayment']
+            },
+            removeItemFromCartRoute: {
+                sendingQueues: ['Cart'],
+                receivingQueue: 'removeItemFromCart',
+                commands: ['RemoveItemFromCart']
+            }
         }
 
     }
