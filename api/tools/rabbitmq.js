@@ -41,13 +41,14 @@ module.exports = {
                         callback(false);
                     }, { noAck: true });
                 }
+                setTimeout(function() {
+                    ch.close();
+                    conn.close();
+                    console.log("hna")
+                    if (repeat)
+                        module.exports.receive(queueName, callback);
+                }, 199)
             });
-            setTimeout(function() {
-                conn.close();
-                console.log("hna")
-                if (repeat)
-                    module.exports.receive(queueName, callback);
-            }, 200)
         })
     }
 }
