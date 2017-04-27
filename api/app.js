@@ -12,11 +12,15 @@ global.rabbitmq = require("./tools/rabbitmq");
 global.httpRequest = require("./tools/httpRequest");
 global.parallel = require("./tools/parallel");
 global.consumer = require("./tools/consumer.js");
+global.multer = require('multer');
+global.upload = multer({ dest: 'uploads/' });
 /*-- global variables --*/
 const ratings = require("./routes/ratings");
 const user = require("./routes/user");
 const vendor = require("./routes/vendor");
 const cart = require("./routes/cart");
+const upload = require("./routes/upload");
+
 /*-- Middleware --*/
 app.use('/', function(req, res, next) {
     if (req.headers.hasOwnProperty('token'))
@@ -31,6 +35,7 @@ app.use('/ratings', ratings);
 app.use('/user', user);
 app.use('/vendor', vendor);
 app.use('/cart', cart);
+app.use('/upload', upload);
 /*-- Routes --*/
 
 app.listen(3444, function() {
