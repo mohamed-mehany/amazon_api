@@ -19,7 +19,7 @@ const ratings = require("./routes/ratings");
 const user = require("./routes/user");
 const vendor = require("./routes/vendor");
 const cart = require("./routes/cart");
-const upload = require("./routes/upload");
+const imageupload = require("./routes/upload");
 
 /*-- Middleware --*/
 app.use('/', function(req, res, next) {
@@ -35,7 +35,7 @@ app.use('/ratings', ratings);
 app.use('/user', user);
 app.use('/vendor', vendor);
 app.use('/cart', cart);
-app.use('/upload', upload);
+app.use('/upload', imageupload);
 /*-- Routes --*/
 
 app.listen(3444, function() {
