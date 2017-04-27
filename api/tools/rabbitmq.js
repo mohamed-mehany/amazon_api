@@ -47,7 +47,7 @@ module.exports = {
                     console.log("hna")
                     if (repeat)
                         module.exports.receive(queueName, callback);
-                }, 199)
+                }, 30)
             });
         })
     }
