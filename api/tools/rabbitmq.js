@@ -23,10 +23,11 @@ module.exports = {
         amqp.connect(protocol + '://' + ip, function(err, conn) {
             if (err)
                 return callback(err);
+            let repeat = true;
             conn.createChannel(function(err, ch) {
-                if (err) {
+                if (err)
                     return callback(err);
-                } else {
+                else {
                     ch.assertQueue(queueName, { durable: false });
                     console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", queueName);
                     ch.consume(queueName, function(response) {
@@ -35,11 +36,18 @@ module.exports = {
                             rabbit[queueName + responseJson.id] = [];
                         }
                         console.log(queueName + responseJson.id);
-                        rabbit[queueName + responseJson.id].push(responseJson.data.toString())
-                        conn.close();
+                        rabbit[queueName + responseJson.id].push(responseJson.data.toString());
+                        repeat = false;
                         callback(false);
                     }, { noAck: true });
                 }
+                setTimeout(function() {
+                    ch.close();
+                    conn.close();
+                    console.log("hna")
+                    if (repeat)
+                        module.exports.receive(queueName, callback);
+                }, 30)
             });
         })
     }
