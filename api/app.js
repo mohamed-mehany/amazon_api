@@ -17,6 +17,7 @@ const ratings = require("./routes/ratings");
 const user = require("./routes/user");
 const vendor = require("./routes/vendor");
 const cart = require("./routes/cart");
+const product = require("./routes/product");
 /*-- Middleware --*/
 app.use('/', function(req, res, next) {
     if (req.headers.hasOwnProperty('token'))
@@ -31,6 +32,7 @@ app.use('/ratings', ratings);
 app.use('/user', user);
 app.use('/vendor', vendor);
 app.use('/cart', cart);
+app.use('/product', product);
 /*-- Routes --*/
 
 app.listen(3444, function() {

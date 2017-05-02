@@ -83,6 +83,23 @@ module.exports = {
                 receivingQueue: 'removeItemFromCart',
                 commands: ['RemoveItemFromCart']
             }
+        },
+        products: {
+            indexProductsRoute: {
+                sendingQueues: ['Product'],
+                receivingQueue: 'indexProducts',
+                commands: ['IndexProducts']
+            },
+            sortProductsRoute: {
+                sendingQueues: ['Product'],
+                receivingQueue: 'sortProducts',
+                commands: ['SortProducts']
+            },
+            viewPriceOfProductsCartRoute: {
+                sendingQueues: ['Product'],
+                receivingQueue: 'viewPriceOfProductsCart',
+                commands: ['ViewPriceOfProductsCart']
+            }
         }
 
     }
