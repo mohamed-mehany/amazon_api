@@ -95,10 +95,10 @@ module.exports = {
                 receivingQueue: 'sortProducts',
                 commands: ['SortProducts']
             },
-            viewPriceOfProductsCartRoute: {
+            viewProductRoute: {
                 sendingQueues: ['Product'],
-                receivingQueue: 'viewPriceOfProductsCart',
-                commands: ['ViewPriceOfProductsCart']
+                receivingQueue: 'viewProduct',
+                commands: ['ViewProduct']
             }
         }
 

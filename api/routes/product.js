@@ -3,7 +3,7 @@ const url = configs.apps.protocol + '://' + configs.apps.ip + '';
 /* -- counters -- */
 let indexProductsRequestCount = 1;
 let sortProductsRequestCount = 1;
-let viewPriceOfProductsCartRequestCount = 1;
+let viewProductRequestCount = 1;
 /* -- counters -- */
 
 
@@ -50,27 +50,24 @@ router.get('/sort/:sortingMethod', function(req, res) {
     })
 });
 
-router.get('/price/:productId/:quantity', function(req, res) {
+router.get('/view/:productId', function(req, res) {
     if (typeof req.params.productId === 'undefined')
         return res.send({ error: 'you must provide a product ID' });
-    if (typeof req.params.quantity === 'undefined')
-        return res.send({ error: 'you must provide a quantity' });
-    const receivingQueue = configs.apps.products.viewPriceOfProductsCartRoute.receivingQueue;
-    const sendingQueues = configs.apps.products.viewPriceOfProductsCartRoute.sendingQueues;
-    const commands = configs.apps.products.viewPriceOfProductsCartRoute.commands;
+    const receivingQueue = configs.apps.products.viewProductRoute.receivingQueue;
+    const sendingQueues = configs.apps.products.viewProductRoute.sendingQueues;
+    const commands = configs.apps.products.viewProductRoute.commands;
     const numberOfRequests = commands.length;
     const data = {
-        requestId: viewPriceOfProductsCartRequestCount,
-        product_id: req.params.productId,
-        quantity: req.params.quantity 
+        requestId: viewProductRequestCount,
+        product_id: req.params.productId
     };
     const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data);
     parallel.parallelize(requests, function(response) {
         if (response) {
             res.send(response);
         } else {
-            consumer.wait(receivingQueue, viewPriceOfProductsCartRequestCount, numberOfRequests, function() {
-                res.send(rabbit[receivingQueue + viewPriceOfProductsCartRequestCount++]);
+            consumer.wait(receivingQueue, viewProductRequestCount, numberOfRequests, function() {
+                res.send(rabbit[receivingQueue + viewProductRequestCount++]);
             });
         }
     })
