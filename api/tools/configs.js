@@ -55,6 +55,16 @@ module.exports = {
                 sendingQueues: ['Vendor'],
                 receivingQueue: 'registerVendor',
                 commands: ['CreateVendor']
+            },
+            addProductRoute: {
+                sendingQueues: ['Vendor'],
+                receivingQueue: 'addProduct',
+                commands: ['AddProduct']
+            },
+            deleteProductRoute: {
+                sendingQueues: ['Vendor'],
+                receivingQueue: 'deleteProduct',
+                commands: ['DeleteProduct']
             }
         },
         cart: {
