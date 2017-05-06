@@ -4,7 +4,8 @@ module.exports = {
         ip: 'localhost',
     },
     mediaServer: {
-        fixedPath: " : http://localhost:5000/profile/"
+        uploadRoute: "http://localhost:5000/products",
+        getRoute: "http://localhost:5000/"
     },
     apps: {
         protocol: 'http',

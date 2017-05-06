@@ -49,7 +49,7 @@ router.post('/createproduct', upload.single('productImage'), function(req, res, 
     //     typeof req.body.department_id === 'undefined' || typeof req.body.size === 'undefined' || typeof req.body.stock === 'undefined' ||
     //     typeof req.body.colour === 'undefined' || typeof req.body.price === 'undefined')
     //     return res.send({ error: 'you must provide all product information' });
-    let uploadRequest = request.post("http://localhost:3444/upload/2", function(err, resp, body) {
+    let uploadRequest = request.post(configs.mediaServer.uploadRoute, function(err, resp, body) {
         if (err) {
             res.send(err);
         } else {
@@ -67,9 +67,8 @@ router.post('/createproduct', upload.single('productImage'), function(req, res, 
                 stock: req.body.stock,
                 colour: req.body.colour,
                 price: req.body.price,
-                image_path: configs.mediaServer.fixedPath + JSON.parse(body).filename
+                image_path: configs.mediaServer.getRoute + body.filename
             };
-            console.log(data.image_path);
             const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data);
             parallel.parallelize(requests, function(response) {
                 if (response) {
@@ -83,7 +82,7 @@ router.post('/createproduct', upload.single('productImage'), function(req, res, 
         }
     });
     let form = uploadRequest.form();
-    form.append('asd', fs.createReadStream(path));
+    form.append('image', fs.createReadStream(path));
 });
 
 router.delete('/deleteproduct/:productId', function(req, res) {
