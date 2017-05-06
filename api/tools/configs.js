@@ -3,6 +3,9 @@ module.exports = {
         protocol: 'amqp',
         ip: 'localhost',
     },
+    mediaServer: {
+        fixedPath: " : http://localhost:5000/profile/"
+    },
     apps: {
         protocol: 'http',
         ip: 'localhost:8080',

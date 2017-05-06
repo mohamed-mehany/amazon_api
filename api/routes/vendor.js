@@ -40,40 +40,51 @@ router.post('/create', function(req, res) {
     })
 });
 
-router.post('/createproduct', function(req, res) {
+router.post('/createproduct', upload.single('productImage'), function(req, res, next) {
+    let path = req.file
+    console.log(req.file);
+    return res.send("tamam");
     if (typeof req.headers.userId === 'undefined')
         return res.send({ error: 'you must be logged in' });
-    if (typeof req.body.name === 'undefined' || typeof req.body.description === 'undefined' ||
-        typeof req.body.department_id === 'undefined' || typeof req.body.size === 'undefined' || typeof req.body.stock === 'undefined' ||
-        typeof req.body.colour === 'undefined' || typeof req.body.price === 'undefined')
-        return res.send({ error: 'you must provide all product information' });
-
-    const receivingQueue = configs.apps.vendors.addProductRoute.receivingQueue;
-    const sendingQueues = configs.apps.vendors.addProductRoute.sendingQueues;
-    const commands = configs.apps.vendors.addProductRoute.commands;
-    const numberOfRequests = commands.length;
-    const data = {
-        requestId: addProductRequestCount,
-        name: req.body.name,
-        vendor_id: req.headers.userId,
-        description: req.body.description,
-        department_id: req.body.department_id,
-        size: req.body.size,
-        stock: req.body.stock,
-        colour: req.body.colour,
-        price: req.body.price,
-        image_path: req.body.image_path
-    };
-    const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data);
-    parallel.parallelize(requests, function(response) {
-        if (response) {
-            res.send(response);
+    // if (typeof req.body.name === 'undefined' || typeof req.body.description === 'undefined' ||
+    //     typeof req.body.department_id === 'undefined' || typeof req.body.size === 'undefined' || typeof req.body.stock === 'undefined' ||
+    //     typeof req.body.colour === 'undefined' || typeof req.body.price === 'undefined')
+    //     return res.send({ error: 'you must provide all product information' });
+    let uploadRequest = request.post("http://localhost:3444/upload/2", function(err, resp, body) {
+        if (err) {
+            res.send("oinmh");
         } else {
-            consumer.wait(receivingQueue, addProductRequestCount, numberOfRequests, function() {
-                res.send(rabbit[receivingQueue + addProductRequestCount++]);
-            });
+            const receivingQueue = configs.apps.vendors.addProductRoute.receivingQueue;
+            const sendingQueues = configs.apps.vendors.addProductRoute.sendingQueues;
+            const commands = configs.apps.vendors.addProductRoute.commands;
+            const numberOfRequests = commands.length;
+            const data = {
+                requestId: addProductRequestCount,
+                name: req.body.name,
+                vendor_id: req.headers.userId,
+                description: req.body.description,
+                department_id: req.body.department_id,
+                size: req.body.size,
+                stock: req.body.stock,
+                colour: req.body.colour,
+                price: req.body.price,
+                image_path: configs.mediaServer.fixedPath + body.filename
+            };
+            console.log(data.image_path);
+            const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data);
+            parallel.parallelize(requests, function(response) {
+                if (response) {
+                    res.send(response);
+                } else {
+                    consumer.wait(receivingQueue, addProductRequestCount, numberOfRequests, function() {
+                        res.send(rabbit[receivingQueue + addProductRequestCount++]);
+                    });
+                }
+            })
         }
-    })
+    });
+    let form = uploadRequest.form();
+    form.append('asd', fs.createReadStream(path));
 });
 
 router.delete('/deleteproduct/:productId', function(req, res) {

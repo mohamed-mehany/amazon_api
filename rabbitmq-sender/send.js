@@ -1,2 +1,2 @@
 const rabbitmq = require("./tools/rabbitmq")
-rabbitmq.send("indexProducts", '{"id": 1, "data": "omar1"}')
+rabbitmq.send("addProduct", '{"id": 1, "data": "omar1"}')

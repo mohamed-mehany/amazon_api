@@ -14,6 +14,7 @@ global.parallel = require("./tools/parallel");
 global.consumer = require("./tools/consumer.js");
 global.multer = require('multer');
 global.upload = multer({ dest: 'uploads/' });
+global.fs = require('fs');
 /*-- global variables --*/
 const ratings = require("./routes/ratings");
 const user = require("./routes/user");
