@@ -3,6 +3,10 @@ module.exports = {
         protocol: 'amqp',
         ip: 'localhost',
     },
+    mediaServer: {
+        uploadRoute: "http://localhost:5000/products",
+        getRoute: "http://localhost:5000/"
+    },
     apps: {
         protocol: 'http',
         ip: 'localhost:8080',
@@ -55,6 +59,16 @@ module.exports = {
                 sendingQueues: ['Vendor'],
                 receivingQueue: 'registerVendor',
                 commands: ['CreateVendor']
+            },
+            addProductRoute: {
+                sendingQueues: ['Vendor'],
+                receivingQueue: 'addProduct',
+                commands: ['AddProduct']
+            },
+            deleteProductRoute: {
+                sendingQueues: ['Vendor'],
+                receivingQueue: 'deleteProduct',
+                commands: ['DeleteProduct']
             }
         },
         cart: {
@@ -82,6 +96,23 @@ module.exports = {
                 sendingQueues: ['Cart'],
                 receivingQueue: 'removeItemFromCart',
                 commands: ['RemoveItemFromCart']
+            }
+        },
+        products: {
+            indexProductsRoute: {
+                sendingQueues: ['Product'],
+                receivingQueue: 'indexProducts',
+                commands: ['IndexProducts']
+            },
+            sortProductsRoute: {
+                sendingQueues: ['Product'],
+                receivingQueue: 'sortProducts',
+                commands: ['SortProducts']
+            },
+            viewProductRoute: {
+                sendingQueues: ['Product'],
+                receivingQueue: 'viewProduct',
+                commands: ['ViewProduct']
             }
         }
 
