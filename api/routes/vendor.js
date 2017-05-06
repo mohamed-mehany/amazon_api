@@ -41,9 +41,8 @@ router.post('/create', function(req, res) {
 });
 
 router.post('/createproduct', upload.single('productImage'), function(req, res, next) {
-    let path = req.file
+    let path = req.file.path;
     console.log(req.file);
-    return res.send("tamam");
     if (typeof req.headers.userId === 'undefined')
         return res.send({ error: 'you must be logged in' });
     // if (typeof req.body.name === 'undefined' || typeof req.body.description === 'undefined' ||
@@ -52,7 +51,7 @@ router.post('/createproduct', upload.single('productImage'), function(req, res, 
     //     return res.send({ error: 'you must provide all product information' });
     let uploadRequest = request.post("http://localhost:3444/upload/2", function(err, resp, body) {
         if (err) {
-            res.send("oinmh");
+            res.send(err);
         } else {
             const receivingQueue = configs.apps.vendors.addProductRoute.receivingQueue;
             const sendingQueues = configs.apps.vendors.addProductRoute.sendingQueues;
@@ -68,7 +67,7 @@ router.post('/createproduct', upload.single('productImage'), function(req, res, 
                 stock: req.body.stock,
                 colour: req.body.colour,
                 price: req.body.price,
-                image_path: configs.mediaServer.fixedPath + body.filename
+                image_path: configs.mediaServer.fixedPath + JSON.parse(body).filename
             };
             console.log(data.image_path);
             const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data);
