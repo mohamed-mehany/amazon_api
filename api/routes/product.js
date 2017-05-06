@@ -36,7 +36,7 @@ router.get('/sort/:sortingMethod', function(req, res) {
     const numberOfRequests = commands.length;
     const data = {
         requestId: sortProductsRequestCount,
-        sorting_method: req.params.sortingMethod 
+        sorting_method: req.params.sortingMethod
     };
     const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data);
     parallel.parallelize(requests, function(response) {
@@ -50,7 +50,7 @@ router.get('/sort/:sortingMethod', function(req, res) {
     })
 });
 
-router.get('/view/:productId', function(req, res) {
+router.get('/:productId', function(req, res) {
     if (typeof req.params.productId === 'undefined')
         return res.send({ error: 'you must provide a product ID' });
     const receivingQueue = configs.apps.products.viewProductRoute.receivingQueue;

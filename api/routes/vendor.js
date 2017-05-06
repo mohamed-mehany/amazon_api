@@ -40,12 +40,12 @@ router.post('/create', function(req, res) {
     })
 });
 
-router.post('/createProduct', function(req, res) {
+router.post('/createproduct', function(req, res) {
     if (typeof req.headers.userId === 'undefined')
         return res.send({ error: 'you must be logged in' });
-    if (typeof req.body.name === 'undefined' || typeof req.body.vendor_id === 'undefined' || typeof req.body.description === 'undefined' ||
-        typeof req.body.department_id === 'undefined' || typeof req.body.size === 'undefined' || typeof req.body.stock === 'undefined' 
-        || typeof req.body.colour === 'undefined' || typeof req.body.price === 'undefined' || typeof req.body.image_path === 'undefined')
+    if (typeof req.body.name === 'undefined' || typeof req.body.description === 'undefined' ||
+        typeof req.body.department_id === 'undefined' || typeof req.body.size === 'undefined' || typeof req.body.stock === 'undefined' ||
+        typeof req.body.colour === 'undefined' || typeof req.body.price === 'undefined')
         return res.send({ error: 'you must provide all product information' });
 
     const receivingQueue = configs.apps.vendors.addProductRoute.receivingQueue;
@@ -55,7 +55,7 @@ router.post('/createProduct', function(req, res) {
     const data = {
         requestId: addProductRequestCount,
         name: req.body.name,
-        vendor_id: req.body.vendor_id,
+        vendor_id: req.headers.userId,
         description: req.body.description,
         department_id: req.body.department_id,
         size: req.body.size,
@@ -76,7 +76,7 @@ router.post('/createProduct', function(req, res) {
     })
 });
 
-router.delete('/deleteProduct/:productId', function(req, res) {
+router.delete('/deleteproduct/:productId', function(req, res) {
     if (typeof req.headers.userId === 'undefined')
         return res.send({ error: 'you must be logged in' });
     if (typeof req.params.productId === 'undefined')
