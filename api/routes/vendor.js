@@ -45,10 +45,10 @@ router.post('/createproduct', upload.single('productImage'), function(req, res, 
     console.log(req.file);
     if (typeof req.headers.userId === 'undefined')
         return res.send({ error: 'you must be logged in' });
-    // if (typeof req.body.name === 'undefined' || typeof req.body.description === 'undefined' ||
-    //     typeof req.body.department_id === 'undefined' || typeof req.body.size === 'undefined' || typeof req.body.stock === 'undefined' ||
-    //     typeof req.body.colour === 'undefined' || typeof req.body.price === 'undefined')
-    //     return res.send({ error: 'you must provide all product information' });
+    if (typeof req.body.name === 'undefined' || typeof req.body.description === 'undefined' ||
+        typeof req.body.department_id === 'undefined' || typeof req.body.size === 'undefined' || typeof req.body.stock === 'undefined' ||
+        typeof req.body.colour === 'undefined' || typeof req.body.price === 'undefined')
+        return res.send({ error: 'you must provide all product information' });
     let uploadRequest = request.post(configs.mediaServer.uploadRoute, function(err, resp, body) {
         if (err) {
             res.send(err);

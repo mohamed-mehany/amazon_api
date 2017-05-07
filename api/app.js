@@ -1,6 +1,7 @@
 global.express = require('express');
 const app = express();
 const myParser = require("body-parser");
+
 /*-- global variables --*/
 global.rabbit = [];
 global.amqp = require('amqplib/callback_api');
@@ -22,11 +23,32 @@ const vendor = require("./routes/vendor");
 const cart = require("./routes/cart");
 const product = require("./routes/product");
 const imageupload = require("./routes/upload");
+const url = configs.apps.protocol + '://' + configs.apps.ip + '';
+let tokenRequestCount = 1;
 /*-- Middleware --*/
 app.use('/', function(req, res, next) {
-    if (req.headers.hasOwnProperty('token'))
-        req.headers["userId"] = "22";
-    next()
+    if (req.headers.hasOwnProperty('token')) {
+        const receivingQueue = configs.apps.users.tokenRoute.receivingQueue;
+        const sendingQueues = configs.apps.users.tokenRoute.sendingQueues;
+        const commands = configs.apps.users.tokenRoute.commands;
+        const numberOfRequests = commands.length;
+        const data = {
+            requestId: tokenRequestCount,
+            token: req.headers.token,
+        };
+        const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data);
+        parallel.parallelize(requests, function(response) {
+            if (response) {
+                res.send(response);
+            } else {
+                consumer.wait(receivingQueue, tokenRequestCount, numberOfRequests, function() {
+                    req.headers["userId"] = rabbit[receivingQueue + tokenRequestCount++];
+                    next();
+                });
+            }
+        })
+    } else
+        return res.send({ error: 'you must be logged in' });
 });
 app.use(myParser.urlencoded({ extended: true }));
 /*-- Middleware --*/

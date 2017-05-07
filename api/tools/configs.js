@@ -52,6 +52,11 @@ module.exports = {
                 sendingQueues: ['User'],
                 receivingQueue: 'registerUser',
                 commands: ['CreateUser']
+            },
+            tokenRoute: {
+                sendingQueues: ['User'],
+                receivingQueue: 'userToken',
+                commands: ['GetUserByToken']
             }
         },
         vendors: {
