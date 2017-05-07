@@ -1,2 +1,2 @@
 const rabbitmq = require("./tools/rabbitmq")
-rabbitmq.send("removeItemFromCart", '{"id": 1, "data": "omar1"}')
+rabbitmq.receive("registerUser", function(res) { console.log(res) })

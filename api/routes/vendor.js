@@ -18,17 +18,17 @@ router.post('/create', function(req, res) {
     const commands = configs.apps.vendors.registerRoute.commands;
     const numberOfRequests = commands.length;
     const data = {
-        requestId: createVendorRequestCount,
         email: req.body.email,
         name: req.body.name,
         address: req.body.address,
-        gender: req.body.gender,
+        strGender: parseInt(req.body.gender),
+        password: req.body.password,
         date_of_birth: req.body.dateOfBirth
     };
     let token = jwt.sign(data, 'ser-amazon');
     data['password'] = req.body.password;
-    data['token'] = token;
-    const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data);
+    data['token'] = (token.length > 250) ? token.substring(0, 250) : token;
+    const requests = consumer.createRequests(url, receivingQueue, sendingQueues, createVendorRequestCount, commands, data);
     parallel.parallelize(requests, function(response) {
         if (response) {
             res.send(response);

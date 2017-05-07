@@ -1,7 +1,7 @@
 module.exports = {
     apiMQ: {
         protocol: 'amqp',
-        ip: 'localhost',
+        ip: 'user:password@192.168.43.193:5672',
     },
     mediaServer: {
         uploadRoute: "http://localhost:5000/products",
@@ -9,7 +9,7 @@ module.exports = {
     },
     apps: {
         protocol: 'http',
-        ip: 'localhost:8080',
+        ip: '192.168.43.193:8080',
         ratings: {
             getRatingsRoute: {
                 sendingQueues: ['Ratings'],
@@ -41,17 +41,17 @@ module.exports = {
             viewProfileRoute: {
                 sendingQueues: ['User'],
                 receivingQueue: 'viewProfile',
-                commands: ['ViewUserProfile']
+                commands: ['viewUserProfile']
             },
             editProfileRoute: {
                 sendingQueues: ['User'],
                 receivingQueue: 'editProfile',
-                commands: ['EditProfileInfo']
+                commands: ['editProfileInfo']
             },
             registerRoute: {
                 sendingQueues: ['User'],
                 receivingQueue: 'registerUser',
-                commands: ['CreateUser']
+                commands: ['createUser']
             },
             tokenRoute: {
                 sendingQueues: ['User'],
@@ -63,7 +63,7 @@ module.exports = {
             registerRoute: {
                 sendingQueues: ['Vendor'],
                 receivingQueue: 'registerVendor',
-                commands: ['CreateVendor']
+                commands: ['createVendor']
             },
             addProductRoute: {
                 sendingQueues: ['Vendor'],

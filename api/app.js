@@ -33,22 +33,22 @@ app.use('/', function(req, res, next) {
         const commands = configs.apps.users.tokenRoute.commands;
         const numberOfRequests = commands.length;
         const data = {
-            requestId: tokenRequestCount,
-            token: req.headers.token,
+            token: req.headers.token
         };
-        const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data);
+        const requests = consumer.createRequests(url, receivingQueue, sendingQueues, tokenRequestCount, commands, data);
         parallel.parallelize(requests, function(response) {
             if (response) {
                 res.send(response);
             } else {
                 consumer.wait(receivingQueue, tokenRequestCount, numberOfRequests, function() {
-                    req.headers["userId"] = rabbit[receivingQueue + tokenRequestCount++];
+                    req.headers["userId"] = rabbit[receivingQueue + tokenRequestCount++][0][0].id;
+                    console.log(req.headers["userId"]);
                     next();
                 });
             }
         })
     } else
-        return res.send({ error: 'you must be logged in' });
+        next();
 });
 app.use(myParser.urlencoded({ extended: true }));
 /*-- Middleware --*/

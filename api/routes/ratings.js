@@ -7,7 +7,7 @@ let createProductRatingRequestCount = 1;
 let getUserRatingsCount = 1;
 /* -- counters -- */
 
-router.get('productratings/:productId', function(req, res) {
+router.get('/:productId', function(req, res) {
     const productId = req.params.productId;
     const receivingQueue = configs.apps.ratings.getReviewsRoute.receivingQueue;
     const sendingQueues = configs.apps.ratings.getReviewsRoute.sendingQueues;

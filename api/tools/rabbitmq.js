@@ -2,6 +2,7 @@ const protocol = configs.apiMQ.protocol;
 const ip = configs.apiMQ.ip;
 module.exports = {
     send: function(queueName, response) {
+
         amqp.connect(protocol + '://' + ip, function(err, conn) {
             if (err)
                 console.log(err);
@@ -21,8 +22,10 @@ module.exports = {
     },
     receive: function(queueName, callback) {
         amqp.connect(protocol + '://' + ip, function(err, conn) {
-            if (err)
+            if (err) {
+                console.log(err)
                 return callback(err);
+            }
             let repeat = true;
             conn.createChannel(function(err, ch) {
                 if (err)
@@ -31,12 +34,13 @@ module.exports = {
                     ch.assertQueue(queueName, { durable: false });
                     console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", queueName);
                     ch.consume(queueName, function(response) {
+                        console.log(queueName)
                         responseJson = JSON.parse(response.content);
                         if (typeof rabbit[queueName + responseJson.id] === 'undefined') {
                             rabbit[queueName + responseJson.id] = [];
                         }
                         console.log(queueName + responseJson.id);
-                        rabbit[queueName + responseJson.id].push(responseJson.data.toString());
+                        rabbit[queueName + responseJson.id].push(responseJson.data);
                         repeat = false;
                         callback(false);
                     }, { noAck: true });
@@ -47,7 +51,7 @@ module.exports = {
                     console.log("hna")
                     if (repeat)
                         module.exports.receive(queueName, callback);
-                }, 1000)
+                }, 200)
             });
         })
     }

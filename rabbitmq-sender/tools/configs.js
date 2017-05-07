@@ -3,7 +3,7 @@ const ip = 'localhost'
 module.exports = {
     apiMQ: {
         protocol: 'amqp',
-        ip: 'localhost',
+        ip: 'user:password@192.168.1.27:5672',
     },
     apps: {
         protocol: 'http',

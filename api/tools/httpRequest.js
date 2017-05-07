@@ -17,7 +17,7 @@ module.exports = {
             json: data
         };
         request(url, options, function(err, response, body) {
-            if (!err)
+            if (err)
                 callback(err);
             else {
                 let entered = false;

@@ -39,10 +39,9 @@ router.get('/profile', function(req, res) {
     const commands = configs.apps.users.viewProfileRoute.commands;
     const numberOfRequests = commands.length;
     const data = {
-        requestId: viewProfileRequestCount,
-        user_id: req.headers.userId,
+        user_id: parseInt(req.headers.userId),
     };
-    const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data);
+    const requests = consumer.createRequests(url, receivingQueue, sendingQueues, viewProfileRequestCount, commands, data);
     parallel.parallelize(requests, function(response) {
         if (response) {
             res.send(response);
@@ -65,14 +64,13 @@ router.post('/profile/edit', function(req, res) {
     const commands = configs.apps.users.editProfileRoute.commands;
     const numberOfRequests = commands.length;
     const data = {
-        requestId: editProfileRequestCount,
-        user_id: req.headers.userId,
+        user_id: parseInt(req.headers.userId),
         email: req.body.email,
         name: req.body.name,
         address: req.body.address,
         date_of_birth: req.body.dateOfBirth
     };
-    const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data);
+    const requests = consumer.createRequests(url, receivingQueue, sendingQueues, editProfileRequestCount, commands, data);
     parallel.parallelize(requests, function(response) {
         if (response) {
             res.send(response);
@@ -97,20 +95,20 @@ router.post('/create', function(req, res) {
     const commands = configs.apps.users.registerRoute.commands;
     const numberOfRequests = commands.length;
     const data = {
-        requestId: createUserRequestCount,
         email: req.body.email,
         name: req.body.name,
         address: req.body.address,
-        gender: req.body.gender,
+        gender: parseInt(req.body.gender),
         date_of_birth: req.body.dateOfBirth
     };
     let token = jwt.sign(data, 'ser-amazon');
     data['password'] = req.body.password;
-    data['token'] = token;
-    const requests = consumer.createRequests(url, receivingQueue, sendingQueues, commands, data);
+    data['token'] = (token.length > 250) ? token.substring(0, 250) : token;
+    const requests = consumer.createRequests(url, receivingQueue, sendingQueues, createUserRequestCount, commands, data);
     parallel.parallelize(requests, function(response) {
         if (response) {
             res.send(response);
+
         } else {
             consumer.wait(receivingQueue, createUserRequestCount, numberOfRequests, function() {
                 res.send(rabbit[receivingQueue + createUserRequestCount++]);

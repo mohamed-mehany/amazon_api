@@ -37,9 +37,8 @@ module.exports = {
                         if (typeof rabbit[queueName + responseJson.id] === 'undefined') {
                             rabbit[queueName + responseJson.id] = []
                         }
-                        rabbit[queueName + responseJson.id].push(responseJson.data.toString())
                         conn.close()
-                        callback(false)
+                        return res.send(rabbit[queueName + responseJson.id])
                     }, { noAck: true })
                 }
 
